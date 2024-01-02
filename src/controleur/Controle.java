@@ -1,5 +1,7 @@
 package controleur;
 
+import javax.swing.JPanel;
+
 import modele.Jeu;
 import modele.JeuClient;
 import modele.JeuServeur;
@@ -61,9 +63,30 @@ public class Controle implements AsyncResponse, Global {
 			this.leJeu = new JeuServeur(this);
 			this.frmEntreeJeu.dispose();
 			this.frmArene = new Arene();
+			((JeuServeur)this.leJeu).constructionMurs();
 			this.frmArene.setVisible(true);
 		} else {
 			new ClientSocket(this, info, PORT);
+		}
+	}
+	
+	
+	public void evenementJeuServeur(String ordre, Object info) {
+		switch(ordre) {
+		case AJOUTMUR:
+			frmArene.ajoutMurs(info);
+			break;
+		case AJOUTPANELMURS:
+			this.leJeu.envoi((Connection)info, this.frmArene.getJpnMurs());
+			break;
+		}
+	}
+	
+	public void evenementJeuClient(String ordre, Object info) {
+		switch(ordre) {
+		case AJOUTPANELMURS:
+			this.frmArene.setJpnMurs((JPanel)info);
+			break;
 		}
 	}
 	
