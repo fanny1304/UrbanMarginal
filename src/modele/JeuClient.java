@@ -40,8 +40,10 @@ public class JeuClient extends Jeu implements Global{
 			else {
 				this.controle.evenementJeuClient(MODIFPANELJEU, info);
 			}
+		} else if(info instanceof String) {
+			this.controle.evenementJeuClient(MODIFTCHAT, info);
 		}
-	}
+	} 
 	
 	@Override
 	public void deconnexion() {

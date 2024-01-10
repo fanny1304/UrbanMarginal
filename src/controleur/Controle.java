@@ -63,7 +63,7 @@ public class Controle implements AsyncResponse, Global {
 			new ServeurSocket(this, PORT);
 			this.leJeu = new JeuServeur(this);
 			this.frmEntreeJeu.dispose();
-			this.frmArene = new Arene();
+			this.frmArene = new Arene(this, SERVEUR);
 			((JeuServeur)this.leJeu).constructionMurs();
 			this.frmArene.setVisible(true);
 		} else {
@@ -86,20 +86,27 @@ public class Controle implements AsyncResponse, Global {
 		case MODIFPANELJEU : 
 			this.leJeu.envoi((Connection)info, this.frmArene.getJpnJeu());
 			break;
+		case AJOUTPHRASE :
+			this.frmArene.ajoutTchat((String)info);
+			((JeuServeur)this.leJeu).envoi(this.frmArene.getTxtChat());
+			break;
 		}
 	}
 	
 	public void evenementJeuClient(String ordre, Object info) {
 		switch(ordre) {
-		case AJOUTPANELMURS:
+		case AJOUTPANELMURS :
 			this.frmArene.setJpnMurs((JPanel)info);
 			break;
-		case MODIFPANELJEU:
+		case MODIFPANELJEU :
 			this.frmArene.setJpnJeu((JPanel)info);
+			break;
+		case MODIFTCHAT : 
+			this.frmArene.setTxtChat((String)info);
 			break;
 		}
 	}
-	
+	 
 	/**
 	 * Informations provenant de la vue ChoixJoueur
 	 * @param pseudo le pseudo du joueur
@@ -128,7 +135,7 @@ public class Controle implements AsyncResponse, Global {
 				this.leJeu = new JeuClient(this);
 				this.leJeu.connexion(connection);
 				this.frmEntreeJeu.dispose();
-				this.frmArene = new Arene();
+				this.frmArene = new Arene(this, CLIENT);
 				this.frmChoixJoueur = new ChoixJoueur(this);
 				this.frmChoixJoueur.setVisible(true);
 			} else {
@@ -143,5 +150,8 @@ public class Controle implements AsyncResponse, Global {
 		}
 		
 	}
-
+	
+	public void evenementArene(String info) {
+		((JeuClient)this.leJeu).envoi(TCHAT+STRINGSEPARE+info); 
+	}
 }
