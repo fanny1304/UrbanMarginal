@@ -1,5 +1,7 @@
 package modele;
 
+import java.util.Collection;
+
 import javax.swing.JLabel;
 
 /**
@@ -13,10 +15,26 @@ public abstract class Objet {
 	 * position X de l'objet
 	 */
 	protected Integer posX ;
+	
+	/**
+	 * @return posX
+	 */
+	public Integer getPosX() {
+		return posX;
+	}
+
 	/**
 	 * position Y de l'objet
 	 */
 	protected Integer posY ;
+	
+	/**
+	 * @return posY
+	 */
+	public Integer getPosY() {
+		return posY;
+	}
+
 	/**
 	 * label contenant l'objet graphique (personnage, mur, boule) 
 	 */
@@ -42,4 +60,20 @@ public abstract class Objet {
 				this.posY<objet.posY+objet.jLabel.getHeight()) ;
 		}
 	}	
+	
+	/**
+	 * Vérifie si l'objet actuel touche un des objets de la collection
+	 * @param lesObjets collection d'objets (murs, joueurs ou boules)
+	 * @return l'objet touché ou null
+	 */
+	public Objet toucheCollectionObjets (Collection<Objet> lesObjets) {
+		for (Objet unObjet : lesObjets) {
+			if (!unObjet.equals(this)) {
+				if (toucheObjet(unObjet)) {
+					return unObjet ;
+				}
+			}
+		}
+		return null ;
+	}
 }

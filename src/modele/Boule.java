@@ -1,10 +1,18 @@
 package modele;
 
+import java.net.URL;
+import java.util.Collection;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import controleur.Global;
+
 /**
  * Gestion de la boule
  *
  */
-public class Boule extends Objet {
+public class Boule extends Objet implements Global, Runnable{
 
 	/**
 	 * instance de JeuServeur pour la communication
@@ -12,15 +20,103 @@ public class Boule extends Objet {
 	private JeuServeur jeuServeur ;
 	
 	/**
+	 * collection de murs
+	 */
+	private Collection lesMurs;
+
+	/**
+	 * joueur qui lance la boule
+	 */
+	private Joueur attaquant;
+	
+	/**
 	 * Constructeur
 	 */
-	public Boule() {
+	public Boule(JeuServeur jeuServeur) {
+		this.jeuServeur = jeuServeur;
+		super.jLabel = new JLabel();
+		super.jLabel.setVisible(false);
+		URL resource = getClass().getClassLoader().getResource(BOULE);
+		super.jLabel.setIcon(new ImageIcon(resource));
+		super.jLabel.setBounds(0,0,LARGEURBOULE, HAUTEURBOULE);
 	}
 	
 	/**
 	 * Tire d'une boule
 	 */
-	public void tireBoule() {
+	public void tireBoule(Joueur attaquant, Collection lesMurs) {
+		this.lesMurs = lesMurs;
+		this.attaquant = attaquant;
+		// positionnement de la boule 
+		if (attaquant.getOrientation() == GAUCHE) {
+			posX = attaquant.getPosX() - LARGEURBOULE - 1;
+		}else {
+			posX = attaquant.getPosX() + LARGEURPERSO + 1;
+		}
+		posY = attaquant.getPosY() + HAUTEURPERSO / 2;
+		// démarrer le thread pour gérer le tir de la boule 
+		new Thread(this).start();
+	}
+
+	@Override
+	public void run() {
+		// afficher l'attaquant à l'étape repos de la marche 
+		this.attaquant.affiche(MARCHE, 1);
+		// rendre la boule visible 
+		super.jLabel.setVisible(true);
+		// préparer la victime (dans le cas où le joueur est touché) 
+		Joueur victime = null;
+		// pas positif ou négatif (suivant l'orientation du joueur) pour faire avancer la boule
+		int lePas;
+		if (attaquant.getOrientation() == GAUCHE) {
+			lePas = - PAS;
+		} else {
+			lePas = PAS;
+		}
+		// gestion de la trajectoire de la boule 
+		do {
+			// la boule avance 
+			posX += lePas;
+			jLabel.setBounds(posX, posY, LARGEURBOULE, HAUTEURBOULE);
+			// envoi de la nouvelle zone de jeu à tous (pour que tous voient la boule avancer) 
+			this.jeuServeur.envoiJeuATous();
+			// récupère la collection actuelle de joueur 
+			Collection lesJoueurs = this.jeuServeur.getLesJoueurs();
+			// récupération de l'éventuelle victime 
+			victime = (Joueur)super.toucheCollectionObjets(lesJoueurs);
+		}while (posX >= 0 && posX <= LARGEURARENE && this.toucheCollectionObjets(lesMurs)== null && victime==null);
+		// vérifiez s'il y a une victime et qu'elle n'est pas déjà morte 
+		if (victime != null && !victime.estMort()) {
+			victime.perteVie();
+			attaquant.gainVie();
+			// joue l'amination de la victime blessée 
+			for (int k = 1 ; k <= NBETAPESTOUCHE; k++) {
+				victime.affiche(TOUCHE, k);
+				pause(80,0);
+			}
+			// contrôle si la victime est morte 
+			if (victime.estMort()) {
+				//joue l'animation de la victime morte 
+				for (int k = 1 ; k <= NBETAPESMORT; k++) {
+					victime.affiche(MORT, k);
+					pause(80,0);
+				}
+			}else {
+				victime.affiche(MARCHE, 1);
+			}
+		}
+		// rendre la boule invisible 
+		this.jLabel.setVisible(false);
+		// envoyer le nouveau jeu à tous
+		this.jeuServeur.envoiJeuATous();
+	}
+	
+	private void pause(long millis, int nanos) {
+		try {
+			Thread.sleep(millis, nanos);
+		} catch (InterruptedException e) {
+			System.out.println("ereur pause");
+		}
 	}
 	
 }

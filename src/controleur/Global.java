@@ -139,6 +139,15 @@ public interface Global {
 	 */
 	int HAUTEURMESSAGE = 8;
 	/**
+	 * largeur de la boule
+	 */
+	int LARGEURBOULE = 17;
+	/**
+	 * hauteur de la boule 
+	 */
+	int HAUTEURBOULE = 17;
+	
+	/**
 	 * nombres de murs dans l'arène 
 	 */
 	int NBMURS = 20;
@@ -198,4 +207,12 @@ public interface Global {
 	 * Nombre d'étapes (d'images) pour donner l'impression de la marche 
 	 */
 	int NBETAPESMARCHE = 4;
+	/**
+	 * Nombre d'étapes (d'images) pour donner l'impression être touché
+	 */
+	int NBETAPESTOUCHE = 2;
+	/**
+	 * Nombre d'étapes (d'images) pour donner l'impression être mort
+	 */
+	int NBETAPESMORT = 2;
 }
