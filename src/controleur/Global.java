@@ -186,4 +186,16 @@ public interface Global {
 	 * Message "client" pour la création d'un client 
 	 */
 	String CLIENT = "client";
+	/**
+	 * ordre pour exécuter une action 
+	 */
+	String ACTION = "action";
+	/**
+	 * taille du pas quand le personnage avance (nombre de pixels)
+	 */
+	int PAS = 10;
+	/**
+	 * Nombre d'étapes (d'images) pour donner l'impression de la marche 
+	 */
+	int NBETAPESMARCHE = 4;
 }
