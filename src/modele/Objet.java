@@ -16,6 +16,9 @@ public abstract class Objet {
 	 */
 	protected Integer posX ;
 	
+	public void setPosX(Integer posX) {
+		this.posX = posX;
+	}
 	/**
 	 * @return posX
 	 */
@@ -28,6 +31,9 @@ public abstract class Objet {
 	 */
 	protected Integer posY ;
 	
+	public void setPosY(Integer posY) {
+		this.posY = posY;
+	}
 	/**
 	 * @return posY
 	 */
