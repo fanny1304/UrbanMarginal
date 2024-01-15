@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 
 import controleur.Controle;
 import controleur.Global;
+import outils.son.Son;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -45,13 +46,22 @@ public class ChoixJoueur extends JFrame implements Global {
 	 * Numéro du personnage sélectionné
 	 */
 	private int numPerso;
-
+	/**
+	 * Sons
+	 */
+	private Son welcome;
+	private Son precedent;
+	private Son suivant;
+	private Son go;
+	
+	
 	/**
 	 * Clic sur la flèche "précédent" pour afficher le personnage précédent
 	 */
 	private void lblPrecedent_clic() {
 		numPerso = ((numPerso+1)%NBPERSOS)+1;
 		affichePerso();
+		precedent.play();
 	}
 	
 	/**
@@ -60,6 +70,7 @@ public class ChoixJoueur extends JFrame implements Global {
 	private void lblSuivant_clic() {
 		numPerso = (numPerso%NBPERSOS)+1 ;
 		affichePerso();
+		suivant.play();
 	}
 	
 	/**
@@ -71,6 +82,7 @@ public class ChoixJoueur extends JFrame implements Global {
 			this.txtPseudo.requestFocus();
 		} else {
 			this.controle.evenementChoixJoueur(this.txtPseudo.getText(), numPerso);
+			go.play();
 		}
 	}
 	
@@ -195,5 +207,11 @@ public class ChoixJoueur extends JFrame implements Global {
 		// positionnement sur la zone de saisie
 		txtPseudo.requestFocus();
 
+		// recuperation des sons 
+		precedent = new Son(getClass().getClassLoader().getResource(SONPRECEDENT));
+		suivant = new Son(getClass().getClassLoader().getResource(SONSUIVANT));
+		go = new Son(getClass().getClassLoader().getResource(SONGO));
+		welcome = new Son(getClass().getClassLoader().getResource(SONWELCOME));
+		welcome.play();		
 	}
 }

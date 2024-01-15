@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 
 import controleur.Controle;
 import controleur.Global;
+import outils.son.Son;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.URL;
@@ -50,7 +52,10 @@ public class Arene extends JFrame implements Global {
 	 * Permet de savoir si c'est une arène client ou serveur
 	 */
 	private Boolean client;
-	
+	/**
+	 * Tableau des sons de l'arène 
+	 */
+	private Son[] lesSons = new Son[SON.length];
 	/**
 	 * @return the jpnMurs
 	 */
@@ -152,13 +157,17 @@ public class Arene extends JFrame implements Global {
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_UP :
 		case KeyEvent.VK_DOWN:
-		case KeyEvent.VK_SPACE:
+		case KeyEvent.VK_SPACE:  
 			touche = e.getKeyCode();
 			break;
 		}
 		if (touche != -1) {
 			this.controle.evenementArene(touche);
 		}
+	}
+	
+	public void joueSon(int numSon) {
+		this.lesSons[numSon].play();
 	}
 	
 	/**
@@ -231,6 +240,13 @@ public class Arene extends JFrame implements Global {
 		lblFond.setIcon(new ImageIcon(resource));		
 		lblFond.setBounds(0, 0, 800, 600);
 		contentPane.add(lblFond);
+		
+		// gestion des sons pour le client 
+		if (this.client) {
+			for (int k = 0; k < SON.length ; k++ ) {
+				lesSons[k] = new Son(getClass().getClassLoader().getResource(SON[k]));
+			}
+		}
 		
 		// récupération de l'instance de Controle
 		this.controle = controle;

@@ -43,6 +43,38 @@ public interface Global {
 	 */
 	String CHEMINSONS = "sons"+CHEMINSEPARATOR;
 	/**
+	 * Chemin du son welcome (entrée dans la vue joueur) 
+	 */
+	String SONWELCOME = CHEMINSONS + "welcome.wav";
+	/**
+	 * Chemin du son suivant (cilc sur le bouton suivant de la vue ChoixJoueur) 
+	 */
+	String SONSUIVANT = CHEMINSONS + "suivant.wav";
+	/**
+	 * Chemin du son précédent (clic sur le bouton précédent de la vue ChoixJoueur) 
+	 */
+	String SONPRECEDENT = CHEMINSONS + "precedent.wav";
+	/**
+	 * Chemin du son go (clic sur le bouton Go de la vue ChoixJoueur)
+	 */
+	String SONGO = CHEMINSONS + "go.wav";
+	/**
+	 * tableau des sons de la vue Arene 
+	 */
+	String[] SON = {CHEMINSONS + "fight.wav", CHEMINSONS + "hurt.wav", CHEMINSONS + "death.wav"};
+	/**
+	 * Numéro correspondant au son figth 
+	 */
+	int FIGHT = 0;
+	/**
+	 * Numéro correspondant au son hurt 
+	 */
+	int HURT = 1;
+	/**
+	 * Numéro correspondant u son death 
+	 */
+	int DEATH = 2;
+	/**
 	 * Chemin de l'image de fond de la vue ChoixJoueur
 	 */
 	String FONDCHOIX = CHEMINFONDS+"fondchoix.jpg";
@@ -215,4 +247,8 @@ public interface Global {
 	 * Nombre d'étapes (d'images) pour donner l'impression être mort
 	 */
 	int NBETAPESMORT = 2;
+	/**
+	 * Ordre pour jouer un son (arène du client)
+	 */
+	String JOUESON = "joue son";
 }
